@@ -84,11 +84,11 @@ class _ScrollablePositionedListPageState
       autofocus: true,
       onKey: (value) {
         var data = value.data;
-        print(data.logicalKey.debugName);
+        print(
+            'debugName ${data.logicalKey.debugName} keyId ${data.logicalKey.keyId}');
         if ((value is RawKeyDownEvent || value is RawKeyEventDataLinux) &&
             (data.logicalKey.debugName == 'Arrow Up' ||
-                data.logicalKey.keyId == 265)) {
-          print('Arrow Up');
+                data.logicalKey.keyId == 4295426130)) {
           if (_current > 0) {
             setState(() {
               _current--;
@@ -98,8 +98,7 @@ class _ScrollablePositionedListPageState
         }
         if ((value is RawKeyDownEvent || value is RawKeyEventDataLinux) &&
             (data.logicalKey.debugName == 'Arrow Down' ||
-                data.logicalKey.keyId == 264)) {
-          print('Arrow Down');
+                data.logicalKey.keyId == 4295426129)) {
           if (_current <= numberOfRows) {
             setState(() {
               _current++;
@@ -118,7 +117,7 @@ class _ScrollablePositionedListPageState
       )));
 
   void scrollTo(int index) => itemScrollController.scrollTo(
-      index: index, duration: scrollDuration, curve: Curves.easeInOutCubic);
+      index: index, duration: scrollDuration, curve: Curves.easeInOut);
 
   Widget listBuild(int i) {
     int itemCount = numberOfItemsPerRow;
@@ -165,7 +164,6 @@ class _ScrollablePositionedListPageState
                   width: 4.0,
                 ),
         ),
-        // child: listBuild(i),
         child: Stack(children: [
           Container(
             child: listBuild(i),
@@ -182,20 +180,6 @@ class _ScrollablePositionedListPageState
                   ),
           )
         ]),
-        // child: Stack(
-        //   children: [
-        //     Container(
-        //       height: double.infinity,
-        //       width: double.infinity,
-        //       child: Image.network('https://picsum.photos/500/200?id=${i + 1}'),
-        //     ),
-        //     Center(
-        //       child: i == _current
-        //           ? Text('Active Item ${i + 1}')
-        //           : Text('Item ${i + 1}'),
-        //     )
-        //   ],
-        // ),
       ),
     );
   }
