@@ -61,6 +61,7 @@ class _ScrollablePositionedListPageState
   List<double> itemHeights;
   List<Color> itemColors;
   int _current = 0;
+  Axis _mainAxis = Axis.vertical;
 
   @override
   void initState() {
@@ -86,7 +87,11 @@ class _ScrollablePositionedListPageState
         var data = value.data;
         print(
             'debugName ${data.logicalKey.debugName ?? data.logicalKey.keyLabel} keyId ${data.logicalKey.keyId}');
-        if (value is RawKeyDownEvent && (data.logicalKey == LogicalKeyboardKey.arrowUp || data.logicalKey == LogicalKeyboardKey.arrowLeft)) {
+
+        if (value is! RawKeyDownEvent)
+          return;
+
+        if (data.logicalKey == LogicalKeyboardKey.arrowUp || data.logicalKey == LogicalKeyboardKey.arrowLeft) {
           if (_current > 0) {
             setState(() {
               _current--;
@@ -94,13 +99,20 @@ class _ScrollablePositionedListPageState
             scrollTo(_current);
           }
         }
-        if (value is RawKeyDownEvent && (data.logicalKey == LogicalKeyboardKey.arrowDown || data.logicalKey == LogicalKeyboardKey.arrowRight)) {
+        if (data.logicalKey == LogicalKeyboardKey.arrowDown || data.logicalKey == LogicalKeyboardKey.arrowRight) {
           if (_current <= numberOfRows) {
             setState(() {
               _current++;
             });
             scrollTo(_current);
           }
+        }
+
+        if (data.logicalKey == LogicalKeyboardKey.enter || data.logicalKey == LogicalKeyboardKey.select) {
+          setState(() {
+            _mainAxis = flipAxis(_mainAxis);
+            print("Set main axis ${_mainAxis}");
+          });
         }
       },
       child: Material(
@@ -109,7 +121,7 @@ class _ScrollablePositionedListPageState
         itemBuilder: (context, index) => item(index),
         itemScrollController: itemScrollController,
         itemPositionsListener: itemPositionsListener,
-        scrollDirection: Axis.vertical,
+        scrollDirection: _mainAxis,
       )));
 
   void scrollTo(int index) => itemScrollController.scrollTo(
@@ -118,7 +130,7 @@ class _ScrollablePositionedListPageState
   Widget listBuild(int i) {
     int itemCount = numberOfItemsPerRow;
     return ListView.builder(
-      scrollDirection: Axis.horizontal,
+      scrollDirection: flipAxis(_mainAxis),
       itemCount: itemCount,
       itemBuilder: (context, index) {
         return Container(
@@ -140,9 +152,11 @@ class _ScrollablePositionedListPageState
   /// Generate item number [i].
   Widget item(int i) {
     return SizedBox(
+      width: itemHeights[i],
       height: itemHeights[i],
       child: AnimatedContainer(
         duration: animationDuration,
+        width: itemHeights[i],
         height: itemHeights[i],
         margin: const EdgeInsets.all(10.0),
         padding: const EdgeInsets.all(5.0),
