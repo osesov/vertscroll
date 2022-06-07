@@ -1,0 +1,10 @@
+{
+  "id": "com.orioninc.demo",
+  "version": "0.0.1",
+  "vendor": "Orion Inc",
+  "type": "web",
+  "main": "index.html",
+  "title": "flutter-ui",
+  "icon": "icons/zodiac2.jpg",
+  "largeIcon": "icons/zodiac2.jpg"
+}
