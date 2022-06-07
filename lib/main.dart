@@ -85,10 +85,8 @@ class _ScrollablePositionedListPageState
       onKey: (value) {
         var data = value.data;
         print(
-            'debugName ${data.logicalKey.debugName} keyId ${data.logicalKey.keyId}');
-        if ((value is RawKeyDownEvent || value is RawKeyEventDataLinux) &&
-            (data.logicalKey.debugName == 'Arrow Up' ||
-                data.logicalKey.keyId == 4295426130)) {
+            'debugName ${data.logicalKey.debugName ?? data.logicalKey.keyLabel} keyId ${data.logicalKey.keyId}');
+        if (value is RawKeyDownEvent && (data.logicalKey == LogicalKeyboardKey.arrowUp || data.logicalKey == LogicalKeyboardKey.arrowLeft)) {
           if (_current > 0) {
             setState(() {
               _current--;
@@ -96,9 +94,7 @@ class _ScrollablePositionedListPageState
             scrollTo(_current);
           }
         }
-        if ((value is RawKeyDownEvent || value is RawKeyEventDataLinux) &&
-            (data.logicalKey.debugName == 'Arrow Down' ||
-                data.logicalKey.keyId == 4295426129)) {
+        if (value is RawKeyDownEvent && (data.logicalKey == LogicalKeyboardKey.arrowDown || data.logicalKey == LogicalKeyboardKey.arrowRight)) {
           if (_current <= numberOfRows) {
             setState(() {
               _current++;
